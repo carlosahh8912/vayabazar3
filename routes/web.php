@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\StoreController;
+use App\Http\Livewire\BrandController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -20,3 +22,7 @@ Route::get('/', function () {
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     return view('dashboard');
 })->name('dashboard');
+
+Route::resource('stores', StoreController::class)->middleware('auth');
+
+Route::get('brands', BrandController::class)->name('brands')->middleware('auth');
