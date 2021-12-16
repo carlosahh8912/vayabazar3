@@ -17,7 +17,7 @@
             <h1 class="text-dark mb-3">Inicia sesión</h1>
             <!--end::Title-->
             <!--begin::Link-->
-            <div class="text-gray-400 fw-bold fs-4">Nuevo aquí? 
+            <div class="text-gray-400 fw-bold fs-4">¿Nuevo aquí? 
                 @if (Route::has('register'))
                     <a href="{{ route('register') }}" class="link-primary fw-bolder">Crea una cuenta</a>
                 @endif
@@ -47,7 +47,7 @@
                 <!--end::Label-->
                 <!--begin::Link-->
                 @if (Route::has('password.request'))
-                    <a href="{{ route('password.request') }}" class="link-primary fs-6 fw-bolder">{{ __('Forgot your password?') }}</a>
+                    <a href="{{ route('password.request') }}" class="link-primary fs-6 fw-bolder">{{ __('¿Olvidaste tu contraseña?') }}</a>
                 @endif
                 <!--end::Link-->
             </div>
@@ -63,7 +63,7 @@
                 <div class="custom-control custom-checkbox">
                     <x-jet-checkbox id="remember_me" name="remember" />
                     <label class="custom-control-label" for="remember_me">
-                        {{ __('Remember Me') }}
+                        {{ __('Recuerdame') }}
                     </label>
                 </div>
             </div>
@@ -73,8 +73,8 @@
         <!--begin::Actions-->
         <div class="text-center">
             <!--begin::Submit button-->
-            <button  class="btn btn-lg btn-primary fw-bolder me-3 my-2 w-100">
-                <span class="indicator-label">Sign In</span>
+            <button  class="btn btn-lg btn-info fw-bolder me-3 my-2 w-100">
+                <span class="indicator-label">Ingresar</span>
                 <span class="indicator-progress">Please wait...
                     <span class="spinner-border spinner-border-sm align-middle ms-2"></span></span>
             </button>

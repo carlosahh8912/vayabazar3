@@ -6,7 +6,7 @@
     <div class="header-brand">
         <!--begin::Logo-->
         <a href="{{ route('dashboard') }}">
-            <img alt="Logo" src="{{ asset('media/logos/default.svg') }}" class="h-25px" />
+            <img alt="Logo" src="{{ asset('media/logos/vayabazar_logo_sm.png') }}" class="h-75px" />
         </a>
         <!--end::Logo-->
         <!--begin::Aside toggle-->

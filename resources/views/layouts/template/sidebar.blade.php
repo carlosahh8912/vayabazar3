@@ -13,7 +13,7 @@
         </x-slot>
     </x-menu-item>
 
-    <x-menu-item name="Clientes" :link="route('dashboard')" class="active">
+    <x-menu-item name="Clientes" :link="route('customers')" class="active">
         <x-slot name="icon">
             <span class="svg-icon svg-icon-5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -26,7 +26,7 @@
         </x-slot>
     </x-menu-item>
 
-    <x-menu-item name="Productos" :link="route('dashboard')" class="active">
+    <x-menu-item name="Productos" :link="route('products')" class="active">
         <x-slot name="icon">
             <span class="svg-icon svg-icon-5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -39,7 +39,7 @@
         </x-slot>
     </x-menu-item>
 
-    <x-menu-item name="Ventas" :link="route('dashboard')" class="active">
+    <x-menu-item name="Ventas" :link="route('sales')" class="active">
         <x-slot name="icon">
             <span class="svg-icon svg-icon-5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -65,7 +65,7 @@
         </x-slot>
     </x-menu-item>
 
-    <x-menu-item name="Tiendas" :link="route('stores.index')" class="active">
+    <x-menu-item name="Tiendas" :link="route('stores')" class="active">
         <x-slot name="icon">
             <span class="svg-icon svg-icon-5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -78,7 +78,7 @@
         </x-slot>
     </x-menu-item>
 
-    <x-menu-item name="Paqueterias" :link="route('dashboard')" class="active">
+    <x-menu-item name="Paqueterias" :link="route('shippings')" class="active">
         <x-slot name="icon">
             <span class="svg-icon svg-icon-5">
                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"

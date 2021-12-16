@@ -5,16 +5,19 @@
 
     <x-card-body>
         <x-slot name="card_title">
+
             <x-searcher />
+
             <div wire:loading class=""><span class="ms-3 spinner-border text-primary"></span> Cargando...
             </div>
+
         </x-slot>
 
         <x-slot name="toolbar">
-            <x-modal-button idModal="brand_modal">Nueva Marca</x-modal-button>
+            <x-modal-button>Nueva Marca</x-modal-button>
         </x-slot>
 
-        <x-table wire:ignore.self :titles="['ID','Marca','Fecha','Acciones']">
+        <x-table :titles="['ID','Marca','Prendas','Acciones']">
             @foreach ($brands as $brand)
 
                 <!--end::Table row-->
@@ -29,7 +32,7 @@
                             <a href="#">
                                 <div class="symbol-label">
                                     <img src="{{ asset('storage/brands/' . $brand->image) }}" alt="brand_img"
-                                        class="w-100">
+                                        class="w-100 img-fluid h-100">
                                 </div>
                             </a>
                         </div>
@@ -39,11 +42,11 @@
                     </td>
 
                     <td>
-                        {{ date_format($brand->created_at, 'd M Y') }}
+                        {{ $brand->products()->where('status', 'available')->count() }}
                     </td>
 
 
-                    <td class="d-flex">
+                    <td class="d-flex align-items-center">
 
                         <button
                             class="btn btn-sm btn-outline btn-outline-dashed btn-outline-primary btn-active-light-primary btn-icon me-1">
@@ -60,7 +63,7 @@
                             </span>
                         </button>
 
-                        <button
+                        <button wire:click="show({{ $brand->id }})"
                             class="btn btn-sm btn-outline btn-outline-dashed btn-outline-info btn-active-light-info btn-icon me-1">
                             <span class="svg-icon svg-icon-info svg-icon-2">
                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
@@ -78,22 +81,28 @@
                             </span>
                         </button>
 
-                        <button
-                            class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger btn-icon" title="Eliminar">
-                            <span class="svg-icon svg-icon-danger svg-icon-2"><svg xmlns="http://www.w3.org/2000/svg"
-                                    width="24" height="24" viewBox="0 0 24 24" fill="none">
-                                    <path
-                                        d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
-                                        fill="black" />
-                                    <path opacity="0.5"
-                                        d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
-                                        fill="black" />
-                                    <path opacity="0.5"
-                                        d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
-                                        fill="black" />
-                                </svg></span>
-                        </button>
+                        @if ($brand->products->count() <= 0)
+                            <button
+                                class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger btn-icon"
+                                title="Eliminar" onclick="deleted({{ $brand->id }})">
+                                <span class="svg-icon svg-icon-danger svg-icon-2"><svg
+                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                        fill="none">
+                                        <path
+                                            d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
+                                            fill="black" />
+                                        <path opacity="0.5"
+                                            d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
+                                            fill="black" />
+                                        <path opacity="0.5"
+                                            d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
+                                            fill="black" />
+                                    </svg></span>
+                            </button>
+                        @endif
+
                     </td>
+
                 </tr>
             @endforeach
         </x-table>
@@ -130,7 +139,7 @@
                         </span>
                     @endif
                 </div>
-                <div class="col-12 col-sm-6 col-md-6">
+                <div class="">
                     {{ $brands->links() }}
 
                 </div>
@@ -140,58 +149,98 @@
 
     </x-card-body>
 
-    <x-modal-form title="Modal de prueba" id="brand_modal">
+
+    <x-modal-form title="{{ empty($brand_id) ? 'NUEVA MARCA' : 'ACTUALIZAR MARCA' }}" id="brand_modal">
 
         <x-slot name="content">
 
             <div class="mb-5">
-                <label for="exampleFormControlInput1" class="required form-label">Marca</label>
-                <input wire:model.lazy="name" name="name" id="name" type="text" class="form-control form-control-solid  {{ $errors->has('email') ? 'is-invalid' : '' }}"
-                    placeholder="Nombre de la marca" />
-                    <x-jet-input-error for="name"></x-jet-input-error>
+                <label class="required form-label">Marca</label>
+                <input wire:model.lazy="name" name="name" type="text"
+                    class="form-control form-control-solid  {{ $errors->has('name') ? 'is-invalid' : '' }}"
+                    placeholder="Nombre de la marca" required />
+                @error('name') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
 
-            <div class="">
-                <label for="exampleFormControlInput1" class="form-label">Imágen</label>
-                <input wire:model="image" class="form-control form-control-solid" type="file" name="image" id="image" accept=".png, .jpg, .jpeg" />
+            <div class="mb-5">
+                <label class="form-label">Imágen</label>
+                <input wire:model="image"
+                    class="form-control form-control-solid {{ $errors->has('image') ? 'is-invalid' : '' }}"
+                    type="file" name="image" accept=".png, .jpg, .jpeg" />
+                @error('image') <span class="text-danger">{{ $message }}</span> @enderror
             </div>
 
-            
+            <small wire:loading wire:loading.target="image" class="text-info my-4">Cargando imagen ...</small>
+
+            @if ($image)
+                <div class="">
+                    <img class="img-thumbnail rounded mx-auto d-block" width="150"
+                        src="{{ $image->temporaryUrl() }}">
+                </div>
+            @endif
+
         </x-slot>
 
         <x-slot name="footer">
             <div class="d-flex justify-content-end">
-                <button class="btn btn-light btn-active-light-primary me-2">Cancelar</button>
-                <button class="btn btn-primary">
-                    Guardar
-                    <span class="indicator-progress">
-                        Guardando... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
-                    </span>
-                </button>
+
+                <button wire:click="resetUI()" class="btn btn-light btn-active-light-primary me-2"
+                    data-bs-dismiss="modal">Cancelar</button>
+
+                @if (empty($brand_id) || $brand_id == 0 || $brand_id == '')
+                    <button type="button" id="store" wire:click.prevent="store()" wire:loading.attr="disabled"
+                        wire:loading.class="disabled" class="btn btn-primary">
+                        <span wire:loading.class="d-none" wire:target="store" class="indicator-label">
+                            Guardar
+                        </span>
+                        <span wire:loading wire:target="store" class="indicator-progress">
+                            Guardando... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                @else
+                    <button type="button" id="update" wire:click.prevent="update()" wire:loading.attr="disabled"
+                        wire:loading.class="disabled" class="btn btn-info">
+                        <span wire:loading.class="d-none" wire:target="update" class="indicator-label">
+                            Actializar
+                        </span>
+                        <span wire:loading wire:target="update" class="indicator-progress">
+                            Actualizando... <span class="spinner-border spinner-border-sm align-middle ms-2"></span>
+                        </span>
+                    </button>
+                @endif
+
             </div>
+
         </x-slot>
 
     </x-modal-form>
 
-    {{-- @push('scripts')
+    @push('scripts')
+
+        @include('layouts.template.scripts')
+
         <script>
-            let target = document.querySelector(".modal-content");
-            var blockUI = new KTBlockUI(target, {
-                message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Cargando...</div>',
-                overlayClass: "bg-info bg-opacity-25",
-            });
+            function deleted(id) {
 
-            function block() {
-                if (blockUI.isBlocked()) {
-                    blockUI.release();
-                } else {
-                    blockUI.block();
-                }
+                Swal.fire({
+                    html: `¿Seguro que quieres <span class="badge badge-danger">Eliminar</span> esta marca?`,
+                    icon: "question",
+                    buttonsStyling: false,
+                    showCancelButton: true,
+                    confirmButtonText: "Ok, Eliminar",
+                    cancelButtonText: 'No, Cancelar',
+                    customClass: {
+                        confirmButton: "btn btn-danger",
+                        cancelButton: 'btn btn-secondary'
+                    }
+                }).then((response) => {
+                    if (response.isConfirmed) {
+                        window.livewire.emit('destroy', id);
+                    }
+                });
             };
-
-            block();
         </script>
-    @endpush --}}
+    @endpush
 
 
 

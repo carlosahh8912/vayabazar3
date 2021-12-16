@@ -2,7 +2,8 @@
 
 
 <!--begin::Button-->
-<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{ $idModal }}">
+{{-- <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#{{ $idModal }}"> --}}
+<button type="button" class="btn btn-primary" wire:click="modal({{ true }})">
     <!--begin::Svg Icon | path: icons/duotune/arrows/arr075.svg-->
     <span class="svg-icon svg-icon-2">
         <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

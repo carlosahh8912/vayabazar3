@@ -12,11 +12,12 @@ class Brand extends Model
     protected $fillable = ['name'];
 
     public function products(){
-        return $this->hasMany(Products::class);
+        return $this->hasMany(Product::class);
     }
 
     public function getImageAttribute($image){
-        if($this->$image == null){
+
+        if($image == null){
             return 'noimg.jpg';
         }else{
             if(file_exists('storage/brands/'.$image)){

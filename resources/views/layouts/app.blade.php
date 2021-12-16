@@ -14,7 +14,7 @@
     <meta property="og:url" content="" />
     <meta property="og:site_name" content="Vayabazar" />
     <link rel="canonical" href="" />
-    <link rel="shortcut icon" href="{{ asset('media/logos/favicon.ico') }}" />
+    <link rel="shortcut icon" href="{{ asset('media/logos/vayabazar_logo_sm.png') }}" />
     <!--begin::Fonts-->
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Poppins:300,400,500,600,700" />
     <!--end::Fonts-->
