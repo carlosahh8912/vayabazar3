@@ -148,7 +148,7 @@
         </x-card-body>
 
 
-        <x-modal-form title="{{ empty($customer_id) ? 'NUEVO CLIENTE' : 'ACTUALIZAR CLIENTE' }}" id="customer_modal">
+        <x-modal-form title="{{ empty($customer_id) ? 'NUEVO CLIENTE' : 'ACTUALIZAR CLIENTE' }}" id="formModal">
 
             <x-slot name="content">
 

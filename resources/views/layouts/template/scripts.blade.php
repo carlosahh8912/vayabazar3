@@ -1,7 +1,7 @@
 <script>
     document.addEventListener('DOMContentLoaded', function() {
 
-        let modal = new bootstrap.Modal(document.getElementById('customer_modal'));
+        let modal = new bootstrap.Modal(document.getElementById('formModal'));
         let target = document.querySelector(".modal-content");
         let blockUI = new KTBlockUI(target, {
             message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Cargando...</div>',

@@ -29,7 +29,6 @@
     <!--end::Global Stylesheets Bundle-->
 
     @livewireStyles
-    @powerGridStyles
 </head>
 <!--end::Head-->
 <!--begin::Body-->
@@ -62,7 +61,7 @@
                 <!--begin::Content-->
                 <div class="content d-flex flex-column flex-column-fluid" id="kt_content">
                     <!--begin::Container-->
-                    <div id="kt_content_container" class="container-xxl">
+                    <div id="kt_content_container" class="container-fluid">
 
 
                         <!--begin::Widget 2-->
@@ -127,7 +126,6 @@
     <script src="{{ asset('js/scripts.bundle.js') }}"></script>
     <script src="{{ asset('js/dark-mode.min.js') }}"></script>
     @livewireScripts
-    @powerGridScripts
     <script src="{{ mix('js/app.js') }}"></script>
     <!--end::Global Javascript Bundle-->
     <!--begin::Page Vendors Javascript(used by this page)-->

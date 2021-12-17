@@ -150,7 +150,7 @@
     </x-card-body>
 
 
-    <x-modal-form title="{{ empty($brand_id) ? 'NUEVA MARCA' : 'ACTUALIZAR MARCA' }}" id="brand_modal">
+    <x-modal-form title="{{ empty($brand_id) ? 'NUEVA MARCA' : 'ACTUALIZAR MARCA' }}" id="formModal">
 
         <x-slot name="content">
 
