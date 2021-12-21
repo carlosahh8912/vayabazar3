@@ -11,8 +11,6 @@
             <div class="card">
                 <!--begin::Card body-->
                 <div class="card-body p-12">
-                    <!--begin::Form-->
-                    <form action="" id="kt_invoice_form">
                         <!--begin::Wrapper-->
                         <div class="d-flex flex-column align-items-start flex-xxl-row">
                             <!--begin::Input group-->
@@ -38,6 +36,7 @@
                         <!--end::Separator-->
                         <!--begin::Wrapper-->
                         <div class="mb-0">
+
                             <!--begin::Row-->
                             <div class="row gx-10">
                                 <!--begin::Col-->
@@ -48,19 +47,22 @@
                                 <div class="col-lg-6">
                                     <!--begin::Input group-->
                                     <div wire:ignore class="mb-5">
-                                        <select class="form-control form-control-solid" name="customer_id" id="customer_id" data-control="select2" data-placeholder="Seleccione un cliente">
+                                        <select class="form-control form-control-solid" name="customer_id"
+                                            id="customer_id" data-control="select2"
+                                            data-placeholder="Seleccione un cliente">
                                             <option></option>
                                             @foreach ($customers as $customer)
-                                                
-                                            <option value="{{ $customer->id }}">{{ $customer->name }}</option>
+
+                                                <option value="{{ $customer->id }}">{{ $customer->name }}</option>
                                             @endforeach
                                         </select>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
                                     <div class="mb-5">
-                                        <input type="email" class="form-control form-control-solid" placeholder="Correo"
-                                            readonly disabled>
+                                        <input wire:model="customer_email" type="email"
+                                            class="form-control form-control-solid" placeholder="Correo" readonly
+                                            disabled>
                                     </div>
                                     <!--end::Input group-->
                                 </div>
@@ -69,32 +71,64 @@
                                 <div class="col-lg-6">
                                     <!--begin::Input group-->
                                     <div class="mb-5">
-                                        <input type="text" class="form-control form-control-solid"
-                                            placeholder="Dirección" readonly disabled>
+                                        <input wire:model="customer_address" type="text"
+                                            class="form-control form-control-solid" placeholder="Dirección" readonly
+                                            disabled>
                                     </div>
                                     <!--end::Input group-->
                                     <!--begin::Input group-->
                                     <div class="mb-5">
-                                        <input type="text" class="form-control form-control-solid"
-                                            placeholder="Teléfono" readonly disabled>
+                                        <input wire:model="customer_phone" type="text"
+                                            class="form-control form-control-solid" placeholder="Teléfono" readonly
+                                            disabled>
                                     </div>
                                     <!--end::Input group-->
                                 </div>
                                 <!--end::Col-->
                             </div>
                             <!--end::Row-->
+
                             <!--begin::Separator-->
-                            <div class="separator separator-dashed my-10"></div>
+                            <div class="separator separator-dashed my-8"></div>
                             <!--end::Separator-->
 
-                            <div class="row gx-10 mb-5">
+                            <div class="row gx-10 mb-5 justify-content-center">
+                                <div class="col-12 mb-5">
 
+                                    @foreach ($brands as $brand)
+                                        @if ($brand->products()->where('status', 'available')->count() > 0)
+                                            <button type="button" wire:click="$set('brand_id', {{ $brand->id }})"
+                                                class="btn btn-outline btn-outline-dashed btn-outline-danger m-1 btn-active-light-danger btn-flex px-6">
+                                                <span class="symbol symbol-25px symbol-circle mb-5">
+                                                    <img src="{{ asset('storage/brands/' . $brand->image) }}">
+                                                </span>
+                                                <span class="d-flex flex-column align-items-start ms-2">
+                                                    <span class="fs-3 fw-bolder">{{ $brand->name }}</span>
+                                                    <span
+                                                        class="fs-7">{{ $brand->products()->where('status', 'available')->count() }}</span>
+                                                </span>
+                                            </button>
+                                        @endif
+                                    @endforeach
+                                </div>
+                                @foreach ($products as $product)
+                                    <x-product-card :id="$product->id" :title="$product->description"
+                                        :cost="$product->cost" :price="$product->price" :image="$product->image" />
+                                @endforeach
+
+                                <div class="col-12 mt-3">
+                                    {{ $products->links() }}
+                                </div>
                             </div>
+
+                            <!--begin::Separator-->
+                            <div class="separator separator-dashed my-2"></div>
+                            <!--end::Separator-->
 
                             <!--begin::Table wrapper-->
                             <div class="table-responsive mb-10">
                                 <!--begin::Table-->
-                                <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700" data-kt-element="items">
+                                <table class="table g-5 gs-0 mb-0 fw-bolder text-gray-700">
                                     <!--begin::Table head-->
                                     <thead>
                                         <tr class="border-bottom fs-7 fw-bolder text-gray-700 text-uppercase">
@@ -108,72 +142,42 @@
                                     <!--end::Table head-->
                                     <!--begin::Table body-->
                                     <tbody>
-
-                                        <tr data-kt-element="empty">
+                                        
+                                        @if (empty($cart))
+                                        <tr>
                                             <th colspan="5" class="text-muted text-center py-10">No hay productos</th>
                                         </tr>
+
+                                        @else
+
+                                        @foreach ($cart as $item)
+                                            
+                                            <tr>
+                                                <th>
+                                                    {{ $item->name }}
+                                                </th>
+                                            </tr>
+                                        @endforeach
+
+                                            
+                                        @endif
 
                                     </tbody>
                                     <!--end::Table body-->
                                 </table>
+                                <!--end::Table-->
                             </div>
-                            <!--end::Table-->
-                            <!--begin::Item template-->
-                            <table class="table d-none" data-kt-element="item-template">
-                                <tbody>
-                                    <tr class="border-bottom border-bottom-dashed" data-kt-element="item">
-                                        <td class="pe-7">
-                                            <input type="text" class="form-control form-control-solid mb-2"
-                                                name="name[]" placeholder="Item name">
-                                            <input type="text" class="form-control form-control-solid"
-                                                name="description[]" placeholder="Description">
-                                        </td>
-                                        <td class="ps-0">
-                                            <input class="form-control form-control-solid" type="number" min="1"
-                                                name="quantity[]" placeholder="1" data-kt-element="quantity">
-                                        </td>
-                                        <td>
-                                            <input type="text" class="form-control form-control-solid text-end"
-                                                name="price[]" placeholder="0.00" data-kt-element="price">
-                                        </td>
-                                        <td class="pt-8 text-end">$
-                                            <span data-kt-element="total">0.00</span>
-                                        </td>
-                                        <td class="pt-5 text-end">
-                                            <button type="button" class="btn btn-sm btn-icon btn-active-color-primary"
-                                                data-kt-element="remove-item">
-                                                <!--begin::Svg Icon | path: icons/duotune/general/gen027.svg-->
-                                                <span class="svg-icon svg-icon-3">
-                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24"
-                                                        viewBox="0 0 24 24" fill="none">
-                                                        <path
-                                                            d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
-                                                            fill="black"></path>
-                                                        <path opacity="0.5"
-                                                            d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
-                                                            fill="black"></path>
-                                                        <path opacity="0.5"
-                                                            d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
-                                                            fill="black"></path>
-                                                    </svg>
-                                                </span>
-                                                <!--end::Svg Icon-->
-                                            </button>
-                                        </td>
-                                    </tr>
-                                </tbody>
-                            </table>
+
                             <!--begin::Notes-->
                             <div class="mb-0">
                                 <label class="form-label fs-6 fw-bolder text-gray-700">Comentarios</label>
-                                <textarea name="notes" class="form-control form-control-solid" rows="3"
-                                    placeholder="Comentarios de la venta"></textarea>
+                                <textarea wire:model="notes" name="notes" class="form-control form-control-solid"
+                                    rows="3" placeholder="Comentarios de la venta"></textarea>
                             </div>
                             <!--end::Notes-->
+
                         </div>
                         <!--end::Wrapper-->
-                    </form>
-                    <!--end::Form-->
                 </div>
                 <!--end::Card body-->
             </div>
@@ -202,11 +206,14 @@
 
                         <!--end::Label-->
                         <label class="form-label ">Costo Total</label>
-                        <input class="form-control form-control-flush mb-5 text-end" placeholder="$ 0.00" type="number" readonly />
-                        <label class="form-label ">Subtotal</label>
-                        <input class="form-control form-control-flush mb-5 text-end" placeholder="$ 0.00" type="number" readonly />
+                        <input wire:model="total_cost" name="total_cost" class="form-control form-control-flush mb-5 text-end" placeholder="$ 0.00" type="number"
+                            readonly />
+                        <label class="form-label ">Total Items</label>
+                        <input wire:model="total_items" name="total_items" class="form-control form-control-flush mb-5 text-end" placeholder="$ 0.00" type="number"
+                            readonly />
                         <label class="form-label ">Total</label>
-                        <input class="form-control form-control-flush mb-5 text-end fw-bolder" placeholder="$ 0.00" type="number" readonly />
+                        <input wire:model="total" name="total" class="form-control form-control-flush mb-5 text-end fw-bolder" placeholder="$ 0.00"
+                            type="number" readonly />
                     </div>
                     <!--end::Input group-->
                     <!--begin::Separator-->
@@ -218,14 +225,16 @@
                         <label
                             class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
                             <span class="form-check-label ms-0 fw-bolder fs-6 text-gray-700">Pagado</span>
-                            <input class="form-check-input" type="checkbox" value="">
+                            <input wire:model="payment_status" name="payment_status" class="form-check-input"
+                                type="checkbox">
                         </label>
                         <!--end::Option-->
                         <!--begin::Option-->
                         <label
                             class="form-check form-switch form-switch-sm form-check-custom form-check-solid flex-stack mb-5">
                             <span class="form-check-label ms-0 fw-bolder fs-6 text-gray-700">Enviado</span>
-                            <input class="form-check-input" type="checkbox" value="">
+                            <input wire:model="shipping_status" name="shipping_status" class="form-check-input"
+                                type="checkbox">
                         </label>
                         <!--end::Option-->
                     </div>
@@ -240,10 +249,11 @@
                             <!--begin::Col-->
                             <div wire:ignore class="col-12">
                                 <label class="form-label ">Paquetería</label>
-                                <select class="form-control form-control-solid" name="shipping_id" id="shipping_id" data-control="select2" data-placeholder="Paqueteria">
+                                <select class="form-control form-control-solid" name="shipping_id" id="shipping_id"
+                                    data-control="select2" data-placeholder="Paqueteria">
                                     <option value=""></option>
                                     @foreach ($shippings as $shipping)
-                                    <option value="{{ $shipping->id }}">{{ $shipping->name }}</option>
+                                        <option value="{{ $shipping->id }}">{{ $shipping->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -251,10 +261,11 @@
                             <!--begin::Col-->
                             <div wire:ignore class="col-12">
                                 <label class="form-label ">Tienda</label>
-                                <select class="form-control form-control-solid" name="store_id" id="store_id" data-control="select2" data-placeholder="Tienda">
+                                <select class="form-control form-control-solid" name="store_id" id="store_id"
+                                    data-control="select2" data-placeholder="Tienda">
                                     <option value=""></option>
                                     @foreach ($stores as $store)
-                                    <option value="{{ $store->id }}">{{ $store->name }}</option>
+                                        <option value="{{ $store->id }}">{{ $store->name }}</option>
                                     @endforeach
                                 </select>
                             </div>
@@ -292,4 +303,47 @@
 
     </div>
     <!--end::Layout-->
+
+    @push('scripts')
+        <script>
+            document.addEventListener('DOMContentLoaded', function() {
+
+                let target = document.querySelector(".modal-content");
+                // let blockUI = new KTBlockUI(target, {
+                //     message: '<div class="blockui-message"><span class="spinner-border text-primary"></span> Cargando...</div>',
+                //     overlayClass: "bg-info bg-opacity-25",
+                // });
+
+                window.livewire.on('alert', function(msg) {
+                    Swal.fire(
+                        msg.title,
+                        msg.message,
+                        msg.icon
+                    )
+                });
+
+                window.livewire.on('toastr', function(msg) {
+                    toastr[msg.icon](msg.message, msg.title);
+                });
+
+                $('#customer_id').on('change', (e) => {
+                    let customer_id = $('#customer_id').select2("val");
+                    @this.emit('show_customer', customer_id);
+                });
+
+                $('#shipping_id').on('change', (e) => {
+                    let shipping_id = $('#shipping_id').select2("val");
+                    @this.set('shipping_id', shipping_id);
+                });
+
+                $('#store_id').on('change', (e) => {
+                    let store_id = $('#store_id').select2("val");
+                    @this.set('store_id', store_id);
+                });
+
+            });
+        </script>
+    @endpush
+
+
 </div>

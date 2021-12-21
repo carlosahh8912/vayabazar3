@@ -28,7 +28,7 @@
                 <span class="ms-2 h6 text-muted">Nueva venta</span>
             </div>
             <!--end::Select-->
-            <a href="{{ route('sales') }}" class="btn btn-icon border-0 btn-custom flex-shrink-0">
+            <a href="{{ route('sales.create') }}" class="btn btn-icon border-0 btn-custom flex-shrink-0">
                 <!--begin::Svg Icon | path: icons/duotune/arrows/arr087.svg-->
                 <span class="svg-icon svg-icon-2hx">
                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none">

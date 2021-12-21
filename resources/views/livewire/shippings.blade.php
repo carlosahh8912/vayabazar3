@@ -179,7 +179,7 @@
                 function deleted(id) {
 
                     Swal.fire({
-                        html: `¿Seguro que quieres <span class="badge badge-danger">Eliminar</span> esta Tienda?`,
+                        html: `¿Seguro que quieres <span class="badge badge-danger">Eliminar</span> esta paqueteria?`,
                         icon: "question",
                         buttonsStyling: false,
                         showCancelButton: true,

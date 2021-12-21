@@ -301,7 +301,7 @@
             function deleted(id) {
 
                 Swal.fire({
-                    html: `¿Seguro que quieres <span class="badge badge-danger">Eliminar</span> esta marca?`,
+                    html: `¿Seguro que quieres <span class="badge badge-danger">Eliminar</span> este producto?`,
                     icon: "question",
                     buttonsStyling: false,
                     showCancelButton: true,
