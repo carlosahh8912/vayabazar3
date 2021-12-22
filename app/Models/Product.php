@@ -26,4 +26,17 @@ class Product extends Model
     public function SaleDetails(){
         return $this->hasMany(SaleDetail::class);
     }
+
+    public function getImageAttribute($image){
+
+        if($image == null){
+            return 'noimg.jpg';
+        }else{
+            if(file_exists('storage/products/'.$image)){
+                return $image;
+            }else{
+                return 'noimg.jpg';
+            }
+        }
+    }
 }

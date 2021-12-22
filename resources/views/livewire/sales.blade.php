@@ -19,7 +19,8 @@
                 <x-modal-button>Nueva Venta</x-modal-button>
             </x-slot>
 
-            <x-table :titles="['ID','Paqueteria','Acciones']">
+            <x-table
+                :titles="['ID','Cliente', 'Vendedor', 'Esatus', 'Enviado', 'Pagado', 'Total', 'Fecha', 'Acciones']">
                 @foreach ($sales as $sale)
 
                     <!--end::Table row-->
@@ -28,9 +29,40 @@
                         <td>
                             {{ $sale->id }}
                         </td>
-
                         <td class="">
-                            <a href="#" class="text-gray-800 text-hover-primary mb-1">{{ $sale->total }}</a>
+                            {{ $sale->customer->name }}
+                        </td>
+                        <td class="">
+                            {{ $sale->user->name }}
+                        </td>
+                        <td class="text-center">
+                            @if ($sale->status == 'active')
+                                <span class="badge badge-success">Activa</span>
+                            @elseif($sale->status == 'cancelled')
+                                <span class="badge badge-danger">Cancelada</span>
+                            @else
+                                <span class="badge badge-dark">Pendiente</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if ($sale->shipping_status)
+                                <span class="badge badge-info">Enviado</span>
+                            @else
+                                <span class="badge badge-warning">No enviado</span>
+                            @endif
+                        </td>
+                        <td class="text-center">
+                            @if ($sale->payment_status)
+                                <span class="badge badge-primary">Pagado</span>
+                            @else
+                                <span class="badge badge-secondary">Sin pago</span>
+                            @endif
+                        </td>
+                        <td class="">
+                            $ {{ number_format($sale->total,2) }}
+                        </td>
+                        <td class="">
+                            {{ $sale->created_at }}
                         </td>
 
 
@@ -57,20 +89,16 @@
 
                             <button
                                 class="btn btn-sm btn-outline btn-outline-dashed btn-outline-danger btn-active-light-danger btn-icon"
-                                title="Eliminar" onclick="deleted({{ $sale->id }})">
-                                <span class="svg-icon svg-icon-danger svg-icon-2"><svg
-                                        xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
+                                title="Eliminar" onclick="cancelSale({{ $sale->id }})">
+                                <span class="svg-icon svg-icon-danger svg-icon-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"
                                         fill="none">
-                                        <path
-                                            d="M5 9C5 8.44772 5.44772 8 6 8H18C18.5523 8 19 8.44772 19 9V18C19 19.6569 17.6569 21 16 21H8C6.34315 21 5 19.6569 5 18V9Z"
+                                        <path opacity="0.3"
+                                            d="M19 22H5C4.4 22 4 21.6 4 21V3C4 2.4 4.4 2 5 2H14L20 8V21C20 21.6 19.6 22 19 22ZM13.4 14L15.5 11.9C15.9 11.5 15.9 10.9 15.5 10.5C15.1 10.1 14.5 10.1 14.1 10.5L12 12.6L9.89999 10.5C9.49999 10.1 8.9 10.1 8.5 10.5C8.1 10.9 8.1 11.5 8.5 11.9L10.6 14L8.5 16.1C8.1 16.5 8.1 17.1 8.5 17.5C8.7 17.7 9.00001 17.8 9.20001 17.8C9.40001 17.8 9.69999 17.7 9.89999 17.5L12 15.4L14.1 17.5C14.3 17.7 14.6 17.8 14.8 17.8C15 17.8 15.3 17.7 15.5 17.5C15.9 17.1 15.9 16.5 15.5 16.1L13.4 14Z"
                                             fill="black" />
-                                        <path opacity="0.5"
-                                            d="M5 5C5 4.44772 5.44772 4 6 4H18C18.5523 4 19 4.44772 19 5V5C19 5.55228 18.5523 6 18 6H6C5.44772 6 5 5.55228 5 5V5Z"
-                                            fill="black" />
-                                        <path opacity="0.5"
-                                            d="M9 4C9 3.44772 9.44772 3 10 3H14C14.5523 3 15 3.44772 15 4V4H9V4Z"
-                                            fill="black" />
-                                    </svg></span>
+                                        <path d="M15 8H20L14 2V7C14 7.6 14.4 8 15 8Z" fill="black" />
+                                    </svg>
+                                </span>
                             </button>
 
                         </td>
@@ -126,25 +154,25 @@
         @push('scripts')
 
 
-            @include('layouts.template.scripts')
+            {{-- @include('layouts.template.scripts') --}}
 
             <script>
-                function deleted(id) {
+                function cancelSale(id) {
 
                     Swal.fire({
-                        html: `¿Seguro que quieres <span class="badge badge-danger">Eliminar</span> esta Tienda?`,
+                        html: `¿Seguro que quieres <span class="badge badge-danger">Cancelar</span> esta venta?`,
                         icon: "question",
                         buttonsStyling: false,
                         showCancelButton: true,
-                        confirmButtonText: "Ok, Eliminar",
-                        cancelButtonText: 'No, Cancelar',
+                        confirmButtonText: "Ok, Cancelar",
+                        cancelButtonText: 'No, Regresar',
                         customClass: {
                             confirmButton: "btn btn-danger",
                             cancelButton: 'btn btn-secondary'
                         }
                     }).then((response) => {
                         if (response.isConfirmed) {
-                            window.livewire.emit('destroy', id);
+                            window.livewire.emit('cancel_sale', id);
                         }
                     });
                 };

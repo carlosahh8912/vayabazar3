@@ -1,9 +1,9 @@
 @props(['titles' => ['ID', 'TITLE1', 'ACTIONS']])
 
 
-<div id="kt_table_users_wrapper" class="dataTables_wrapper dt-bootstrap4 no-footer">
+<div class="">
     <div class="table-responsive">
-        <table class="table align-middle table-row-dashed fs-6 gy-5 dataTable no-footer" id="kt_table_users">
+        <table class="table table-hover align-middle table-row-dashed fs-6 gy-5 dataTable">
             <!--begin::Table head-->
             <thead>
                 <!--begin::Table row-->

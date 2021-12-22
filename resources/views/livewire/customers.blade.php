@@ -41,7 +41,7 @@
                         </td>
 
                         <td>
-
+                            {{ $customer->status }}
                         </td>
 
                         <td class="d-flex align-items-center">
