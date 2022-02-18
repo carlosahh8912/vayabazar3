@@ -218,7 +218,7 @@
                 <label class="required form-label">Marca</label>
                 <select wire:model.lazy="brand_id" name="brand_id" id="brand_id" 
                     class="form-control form-control-solid  {{ $errors->has('brand_id') ? 'is-invalid' : '' }}" required>
-                    <option disabled selected>Marca del producto</option>
+                    <option selected>Marca del producto</option>
                     @foreach ($brands as $brand)
                         <option value="{{ $brand->id }}">{{ $brand->name }}</option>
                     @endforeach

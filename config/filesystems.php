@@ -30,6 +30,11 @@ return [
 
     'disks' => [
 
+        'tmp-for-tests' => [
+            'driver' => 'local',
+            'root' => storage_path('app/livewire-tmp'),
+        ],
+
         'local' => [
             'driver' => 'local',
             'root' => storage_path('app'),
@@ -51,6 +56,7 @@ return [
             'url' => env('AWS_URL'),
             'endpoint' => env('AWS_ENDPOINT'),
             'use_path_style_endpoint' => env('AWS_USE_PATH_STYLE_ENDPOINT', false),
+            'visibility' => 'public',
         ],
 
     ],

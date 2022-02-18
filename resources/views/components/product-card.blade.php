@@ -1,11 +1,14 @@
 <div class="col-5 mx-2 mb-3 card-flush border-dashed rounded d-flex flex-center flex-column p-3">
     <!--begin::Avatar-->
     <div class="symbol symbol-65px symbol-circle mb-5">
-        <img src="{{ asset('storage/products/'.$image) }}" alt="product">
+        <img src="{{ asset('storage/products/' . $image) }}" alt="product">
     </div>
     <!--end::Avatar-->
     <!--begin::Name-->
-    <p class="fs-4 text-gray-800 text-hover-primary fw-bolder mb-1">{{ $id }}</p>
+    <p class="fs-4 text-gray-800 text-hover-primary fw-bolder mb-1"> 
+        <span class="text-primary">{{ $id }}</span>
+        <span class="d-block d-md-inline text-truncate" style="max-width: 100px;"> {{ $title }}</span>
+    </p>
     <!--end::Name-->
     <!--begin::Info-->
     <div class="d-flex flex-center flex-wrap mb-5">

@@ -17,6 +17,7 @@ class Product extends Model
         'image',
         'brand_id',
         'status',
+        'stock',
     ];
 
     public function brand(){

@@ -9,6 +9,7 @@ use Livewire\Component;
 use Illuminate\Support\Str;
 use Livewire\WithPagination;
 use Livewire\WithFileUploads;
+use PDOException;
 
 class Products extends Component
 {
@@ -78,29 +79,39 @@ class Products extends Component
     // Create new register
     public function store()
     {
-        $this->validate($this->rules);
+        try {
+            $validate = $this->validate($this->rules);
 
-        $brand = Product::create([
-            'description' => ucfirst($this->description),
-            'brand_id' => $this->brand_id,
-            'cost' => $this->cost,
-            'price' => $this->price,
-            'purchased' => $this->purchased,
-            'stock' => 1,
-            'status' => 'available',
-        ]);
+            // if($validate){
+            //     throw new Exception("Error en la validación");
+            // }
 
-        $customFileName = '';
+            $brand = Product::create([
+                'description' => ucfirst($this->description),
+                'brand_id' => $this->brand_id,
+                'cost' => intval($this->cost),
+                'price' => intval($this->price),
+                'purchased' => $this->purchased,
+                'stock' => 1,
+                'status' => 'available',
+            ]);
 
-        if ($this->image) {
-            $customFileName = uniqid() . '_.' . $this->image->extension();
-            $this->image->storeAs('products', $customFileName);
-            $brand->image = $customFileName;
-            $brand->save();
+            $customFileName = '';
+
+            if ($this->image) {
+                $customFileName = uniqid() . '_.' . $this->image->extension();
+                $this->image->storeAs('products', $customFileName, 's3');
+                $brand->image = $customFileName;
+                $brand->save();
+            }
+            $this->modal(false);
+            $this->resetUI();
+            $this->emit('toastr', ['title' => 'Creado', 'message' => 'El producto se ha guardado correctamente!', 'icon' => 'success']);
+        } catch (Exception $e) {
+            $this->emit('toastr', ['title' => '¡Error!', 'message' => $e->getMessage(), 'icon' => 'error']);
+        } catch (PDOException $e) {
+            $this->emit('toastr', ['title' => '¡DB Error!', 'message' => $e->getMessage(), 'icon' => 'error']);
         }
-        $this->modal(false);
-        $this->resetUI();
-        $this->emit('toastr', ['title' => 'Creado', 'message' => 'El producto se ha guardado correctamente!', 'icon' => 'success']);
     }
 
     // Update a register
